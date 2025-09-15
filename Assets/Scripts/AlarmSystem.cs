@@ -22,25 +22,27 @@ public class AlarmSystem : MonoBehaviour
     public void Signalize(float target)
     {
         if (_coroutine != null)
-        {
             StopCoroutine(_coroutine);
-            _coroutine = StartCoroutine(ChangeVolume(target));
-        }
-        else
-        {
-            _coroutine = StartCoroutine(ChangeVolume(target));
-        }
+
+        _coroutine = StartCoroutine(ChangeVolume(target));
     }
 
     private IEnumerator ChangeVolume(float target)
     {
         bool isWork = true;
-
+        
         while (isWork)
         {
-            _audioSource.volume = Mathf.MoveTowards(_audioSource.volume, target, _speed * Time.deltaTime);
+            if (_audioSource.volume == target)
+            {
+                yield break;
+            }
+            else
+            {
+                _audioSource.volume = Mathf.MoveTowards(_audioSource.volume, target, _speed * Time.deltaTime);
 
-            yield return null;
+                yield return null;
+            }
         }
     }
 }
