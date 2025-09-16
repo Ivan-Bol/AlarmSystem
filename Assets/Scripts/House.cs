@@ -19,11 +19,11 @@ public class House : MonoBehaviour
 
     private void TurnUpVolume()
     {
-        _alarmSystem.Signalize(_alarmSystem.MaxVolume);
+        _alarmSystem.TurnUp(_alarmSystem.MaxVolume);
     }
 
     private void TurnDownVolume()
     {
-        _alarmSystem.Signalize(_alarmSystem.MinVolume);
+        _alarmSystem.TurnDown(_alarmSystem.MinVolume);
     }
 }
