@@ -19,30 +19,40 @@ public class AlarmSystem : MonoBehaviour
         _audioSource = GetComponent<AudioSource>();
     }
 
-    public void Signalize(float target)
+    public void TurnUp(float target)
     {
-        if (_coroutine != null)
-            StopCoroutine(_coroutine);
+        TryTurnOff();
+
+        _audioSource.Play();
+        _coroutine = StartCoroutine(ChangeVolume(target));
+    }
+
+    public void TurnDown(float target)
+    {
+        TryTurnOff();
 
         _coroutine = StartCoroutine(ChangeVolume(target));
     }
 
+    private void TryTurnOff()
+    {
+        if (_coroutine != null)
+        {
+            StopCoroutine(_coroutine);
+            _coroutine = null;
+        }
+    }
+
     private IEnumerator ChangeVolume(float target)
     {
-        bool isWork = true;
-        
-        while (isWork)
+        while (_audioSource.volume != target)
         {
-            if (_audioSource.volume == target)
-            {
-                yield break;
-            }
-            else
-            {
-                _audioSource.volume = Mathf.MoveTowards(_audioSource.volume, target, _speed * Time.deltaTime);
-
-                yield return null;
-            }
+            _audioSource.volume = Mathf.MoveTowards(_audioSource.volume, target, _speed * Time.deltaTime);
+            
+            yield return null;
         }
+
+        if (_audioSource.volume == _minVolume)
+            _audioSource.Stop();
     }
 }
